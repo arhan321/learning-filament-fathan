@@ -46,6 +46,10 @@ class ProductResource extends Resource
                 Forms\Components\Textarea::make('deskripsi')
                     ->required()
                     ->columnSpanFull(),
+                Forms\Components\Textarea::make('category')
+                    ->required()
+                    ->maxLength(255),
+                    // ->columnSpanFull(),
                 Forms\Components\TextInput::make('harga')
                     ->required()
                     ->prefix('Rp')
@@ -77,14 +81,19 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('stok')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\ImageColumn::make('gambar') 
-                    ->disk('public') 
-                    ->width(50)
-                    ->height(50),
+                Tables\Columns\BadgeColumn::make('category')
+                    ->colors([
+                        'primary', 
+                    ])
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('harga')
                     ->numeric()
                     ->prefix('Rp. ')
                     ->sortable(),
+                Tables\Columns\ImageColumn::make('gambar') 
+                    ->disk('public') 
+                    ->width(50)
+                    ->height(50),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

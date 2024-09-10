@@ -28,9 +28,17 @@ class ProductPurchaseResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('product_id')
-                    ->required()
-                    ->numeric(),
+                
+                Forms\Components\Select::make('product_id')
+                    ->label('Product')
+                    ->relationship('product', 'nama_product')
+                    ->required(),
+                    
+                Forms\Components\Select::make('user_id')
+                    ->label('user yang membeli')
+                    ->relationship('user', 'name')
+                    ->required(),
+                
                 Forms\Components\TextInput::make('qty')
                     ->required()
                     ->numeric(),
@@ -44,8 +52,11 @@ class ProductPurchaseResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                 ->numeric()
                 ->sortable(),
-                Tables\Columns\TextColumn::make('product.nama_product') // Adjusted field name
-                    ->label('Product Name') // Optional: you can set a custom label
+                Tables\Columns\TextColumn::make('product.nama_product') 
+                    ->label('Product Name') 
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('user.name') 
+                    ->label('user yang membeli') 
                     ->sortable(),
                 Tables\Columns\TextColumn::make('qty')
                     ->numeric()
@@ -60,10 +71,24 @@ class ProductPurchaseResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                // Filter berdasarkan user yang login
+                Tables\Filters\Filter::make('user')
+                    ->form([
+                        Forms\Components\Select::make('user_id')
+                            ->label('User')
+                            ->relationship('user', 'name')
+                            ->required(),
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        if (!empty($data['user_id'])) {
+                            $query->where('user_id', $data['user_id']);
+                        }
+                    }),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(), // Tambahkan aksi View
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(), 
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

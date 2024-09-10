@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug');
             $table->text('deskripsi');
             $table->decimal('harga', 15, 2);
+            $table->string('category')->nullable();
             $table->bigInteger('stok');
             $table->string('gambar')->nullable();
             $table->timestamps();

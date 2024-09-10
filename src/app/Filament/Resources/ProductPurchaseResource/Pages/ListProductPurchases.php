@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\ProductPurchaseResource\Pages;
 
-use App\Filament\Resources\ProductPurchaseResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\ProductPurchaseResource;
 
 class ListProductPurchases extends ListRecords
 {
